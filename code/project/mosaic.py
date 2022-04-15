@@ -2,6 +2,14 @@ import cv2
 import os
 import numpy as np
 from flask import current_app
+import boto3
+
+client = boto3.client(
+    's3',
+    aws_access_key_id='AKIAYFQ27WLIED4ZG4WZ',
+    aws_secret_access_key='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',
+    region_name='ap-northeast-1'
+)
 
 def mosaic(img, rect, size):
     (x1, y1, x2, y2) = rect
@@ -35,5 +43,10 @@ def mosaic_edit(img_array , row_picture_file):
 
     dst = cv2.resize(img, (600, 600))
     cv2.imwrite(picture_path, dst)
+
+    Filename = picture_path
+    Bucket = 'mosaic-app-docker'
+    Key = '/after_image/' + picture_fn
+    client.upload_file(Filename, Bucket, Key)
 
     return picture_fn

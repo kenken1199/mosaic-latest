@@ -3,14 +3,6 @@ from project.mosaic import mosaic_edit
 from project.utils import save_picture
 from project import app
 import numpy as np
-import boto3
-
-client = boto3.client(
-    's3',
-    aws_access_key_id='AKIAYFQ27WLIED4ZG4WZ',
-    aws_secret_access_key='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',
-    region_name='ap-northeast-1'
-)
 
 @app.route('/', methods=['GET', 'POST'])
 def mosaic_view():
