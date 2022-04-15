@@ -1,0 +1,60 @@
+version: 2.1
+
+orbs:
+  python: circleci/python@2.0.3
+  heroku: circleci/heroku@1.2.6
+
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.6.2-stretch-browsers
+    working_directory: ~/flask-mosaic-docker/app
+    steps:
+      - checkout:
+          path: ~/flask-mosaic-docker
+      - run: sudo pip install flask
+
+  test:
+    docker:
+      - image: circleci/python:3.6.2-stretch-browsers
+    working_directory: ~/flask-mosaic-docker/app
+    steps:
+      - checkout:
+          path: ~/flask-mosaic-docker
+      - run: sudo pip install flask
+      - run:
+          name: test
+          command: exec python flask-test.py
+
+  deploy:
+    docker:
+      - image: circleci/python:3.6.2-stretch-browsers
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 19.03.13
+      - heroku/install
+      - run:
+          name: heroku login
+          command: heroku container:login
+      - run:
+          name: push docker image
+          command: heroku container:push web -a $HEROKU_APP_NAME
+      - run:
+          name: release docker image
+          command: heroku container:release web -a $HEROKU_APP_NAME
+
+workflows:
+  version: 2
+  build_test_and_deploy:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only: main
