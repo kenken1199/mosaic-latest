@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+<form method="POST" action="/" enctype="multipart/form-data">
+    <p>モザイクをかけたいファイルをアップロードしてください</p>
+    <input type="file" id="img_file" name="img_file">
+    <input type="submit" value="アップロード">
+</form>
+    {% if img_url_before %}
+<p><img src="{{ img_url_before }}"></p>
+<p><img src="{{ img_url_after }}"></p>
+    {% endif %}
+{% endblock %}

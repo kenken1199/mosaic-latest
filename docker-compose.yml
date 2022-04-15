@@ -1,0 +1,10 @@
+version: '3'
+services:
+  web:
+    build: .
+    command: python3 server.py
+    volumes:
+    - ./code:/code
+    ports:
+    - "8000:5000"
+    tty: true
