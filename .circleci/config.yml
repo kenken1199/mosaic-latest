@@ -16,7 +16,7 @@ jobs:
       - python/install-packages:
           pkg-manager: pip
       - persist_to_workspace:
-          root: ~/code
+          root: ~/project
           paths:
             - .
 
@@ -25,12 +25,12 @@ jobs:
       - image: cimg/python:3.10.1
     steps:
       - attach_workspace:
-          at: ~/code
+          at: ~/project
       - heroku/deploy-via-git:
           force: true
       - run:
           name: runserver
-          command: python3 ~/code/server.py
+          command: python3 /home/circleci/project/code/server.py
 
 workflows:
   test_my_app:
