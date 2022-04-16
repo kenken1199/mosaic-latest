@@ -30,7 +30,7 @@ jobs:
           force: true
       - run:
           name: runserver
-          command: python3 server.py
+          command: python3 ~/code/server.py
 
 workflows:
   test_my_app:
