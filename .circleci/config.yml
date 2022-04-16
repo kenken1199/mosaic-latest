@@ -12,6 +12,8 @@ jobs:
     steps:
       - checkout:
           path: ~/flask-mosaic-docker
+      - run: apt-get update && apt-get upgrade -y
+      - run: apt-get install -y libgl1-mesa-dev
       - run: sudo pip install flask
 
   test:
