@@ -5,31 +5,23 @@ orbs:
   heroku: circleci/heroku@1.2.6
 
 jobs:
-  build:
+  build_and_test:
     docker:
       - image: circleci/python:3.6.2-stretch-browsers
-    working_directory: ~/flask-mosaic-docker/code
     steps:
       - checkout:
-          path: ~/flask-mosaic-docker
+      - python/install-packages:
+          pkg-manager: pip
       - run: sudo apt-get update
       - run: sudo apt-get upgrade -y
       - run: sudo apt-get install -y libgl1-mesa-dev
       - run: sudo pip install --upgrade pip
       - run: sudo pip install --upgrade setuptools
       - run: sudo pip install -r ~/flask-mosaic-docker/code/requirements.txt
-
-  test:
-    docker:
-      - image: circleci/python:3.6.2-stretch-browsers
-    working_directory: ~/flask-mosaic-docker/code
-    steps:
-      - checkout:
-          path: ~/flask-mosaic-docker
-      - run: sudo pip install flask
-      - run:
-          name: test
-          command: exec python flask-test.py
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - .
 
   deploy:
     docker:
@@ -50,16 +42,12 @@ jobs:
           command: heroku container:release web -a $HEROKU_APP_NAME
 
 workflows:
-  version: 2
-  build_test_and_deploy:
+  test_my_app:
     jobs:
-      - build
-      - test:
-          requires:
-            - build
+      - build_and_test
       - deploy:
           requires:
-            - test
+            - build_and_test # build_and_test ジョブが完了している場合のみデプロイします。
           filters:
             branches:
-              only: main
+              only: main # main にある場合のみデプロイします。
