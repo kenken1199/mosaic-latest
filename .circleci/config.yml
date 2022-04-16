@@ -17,7 +17,7 @@ jobs:
       - run: sudo apt-get install -y libgl1-mesa-dev
       - run: sudo pip install --upgrade pip
       - run: sudo pip install --upgrade setuptools
-      - run: sudo pip install -r requirements.txt
+      - run: sudo pip install -r ~/flask-mosaic-docker/code/requirements.txt
 
   test:
     docker:
