@@ -15,7 +15,9 @@ jobs:
       - run: sudo apt-get update
       - run: sudo apt-get upgrade -y
       - run: sudo apt-get install -y libgl1-mesa-dev
-      - run: sudo pip install flask
+      - run: sudo pip install --upgrade pip
+      - run: sudo pip install --upgrade setuptools
+      - run: sudo pip install -r requirements.txt
 
   test:
     docker:
