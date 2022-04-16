@@ -16,7 +16,7 @@ jobs:
       - python/install-packages:
           pkg-manager: pip
       - persist_to_workspace:
-          root: ~/project
+          root: ~/code
           paths:
             - .
 
@@ -25,7 +25,7 @@ jobs:
       - image: cimg/python:3.10.1
     steps:
       - attach_workspace:
-          at: ~/project
+          at: ~/code
       - heroku/deploy-via-git:
           force: true
       - run:
